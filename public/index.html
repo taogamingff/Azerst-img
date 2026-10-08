@@ -1,261 +1,472 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 
 <head>
 
-<meta charset="UTF-8">
+<meta charset="utf-8">
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
 >
 
-<title>Azerst Image VN</title>
+<meta
+  name="theme-color"
+  content="#080b18"
+>
+
+<title>
+Azerst - CÔNG CỤ CHÈN ẢNH TẠO LINK URL
+</title>
+
+<meta
+  name="description"
+  content="Công cụ chèn ảnh và tạo link URL trực tiếp nhanh chóng từ Azerst. Hỗ trợ Android, iPhone và máy tính."
+>
 
 <style>
 
-* {
-  box-sizing: border-box;
+@font-face{
+    font-family:"GFF-Latin-Bold";
+    src:
+        url("https://dl.dir.freefiremobile.com/common/web_event/common/fonts/website/GFFLatinW05-Bold.woff2") format("woff2"),
+        url("https://dl.dir.freefiremobile.com/common/web_event/common/fonts/website/GFFLatinW05-Bold.woff") format("woff");
+    font-display:swap;
 }
 
-body {
+:root{
+  --text:#fff;
+  --muted:#c6c9d7;
+  --card:rgba(10,12,30,.72);
+  --line:rgba(255,255,255,.16);
+  --accent:#75d8ff;
+  --accent2:#a67cff;
+}
 
-  margin: 0;
+*{
+  box-sizing:border-box;
+}
 
-  min-height: 100vh;
+html,
+body{
+  margin:0;
+  min-height:100%;
+  font-family:"GFF-Latin-Bold",Arial,sans-serif;
+}
 
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  color: white;
+body{
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
 
   background:
     radial-gradient(
-      circle at top,
-      #1c2d42,
-      #07090d 60%
+      circle at 15% 15%,
+      rgba(86,207,255,.25),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(166,124,255,.28),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #070916 0%,
+      #11142b 48%,
+      #090a17 100%
     );
 
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  padding: 20px;
+  position:relative;
 }
 
-.container {
+body:before{
 
-  width: 100%;
+  content:"";
 
-  max-width: 520px;
+  position:fixed;
+  inset:0;
 
-  padding: 28px;
+  pointer-events:none;
 
-  border-radius: 24px;
+  opacity:.34;
 
-  background:
-    rgba(255,255,255,0.07);
+  background-image:
+    radial-gradient(
+      circle at 20% 30%,
+      #fff 0 1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      #fff 0 1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      #fff 0 1px,
+      transparent 1.5px
+    );
+
+  background-size:
+    150px 170px,
+    210px 220px,
+    280px 260px;
+}
+
+.wrap{
+
+  width:min(760px,100%);
+
+  margin:auto;
+
+  padding:
+    22px 16px 40px;
+
+  position:relative;
+
+  z-index:1;
+}
+
+.hero{
+
+  text-align:center;
+
+  padding:
+    12px 8px 22px;
+}
+
+.logo{
+
+  width:82px;
+  height:82px;
+
+  object-fit:cover;
+
+  border-radius:24px;
+
+  display:block;
+
+  margin:
+    0 auto 15px;
 
   border:
-    1px solid rgba(255,255,255,0.12);
+    2px solid
+    rgba(255,255,255,.35);
 
   box-shadow:
-    0 20px 70px
-    rgba(0,0,0,0.5);
-
-  backdrop-filter:
-    blur(20px);
+    0 0 40px
+    rgba(117,216,255,.28);
 }
 
-.logo {
+h1{
 
-  text-align: center;
+  font-size:
+    clamp(24px,6vw,42px);
 
-  font-size: 30px;
+  line-height:1.08;
 
-  font-weight: 800;
+  margin:
+    0 0 12px;
 
-  margin-bottom: 7px;
+  text-shadow:
+    0 4px 24px
+    rgba(117,216,255,.28);
 }
 
-.subtitle {
+.desc{
 
-  text-align: center;
+  margin:
+    0 auto;
 
-  color: #9ca9ba;
+  color:var(--muted);
 
-  margin-bottom: 25px;
+  max-width:650px;
+
+  font-size:14px;
+
+  line-height:1.65;
 }
 
-.upload {
+.card{
 
-  display: block;
+  background:var(--card);
 
-  padding: 40px 20px;
+  border:
+    1px solid
+    var(--line);
 
-  text-align: center;
+  border-radius:28px;
+
+  padding:22px;
+
+  backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 25px 80px
+    rgba(0,0,0,.4);
+}
+
+.drop{
 
   border:
     2px dashed
-    rgba(255,255,255,0.2);
+    rgba(117,216,255,.35);
 
-  border-radius: 18px;
+  border-radius:22px;
 
-  cursor: pointer;
+  padding:
+    35px 18px;
 
-  transition: .2s;
+  text-align:center;
+
+  cursor:pointer;
+
+  transition:.2s;
+
+  display:block;
 }
 
-.upload:hover {
+.drop:hover,
+.drop.drag{
 
-  border-color: #3498ff;
+  border-color:var(--accent);
 
   background:
-    rgba(52,152,255,.06);
+    rgba(117,216,255,.08);
+
+  transform:
+    translateY(-1px);
 }
 
-.icon {
+.drop-icon{
 
-  font-size: 50px;
+  font-size:50px;
 
-  margin-bottom: 12px;
+  margin-bottom:8px;
 }
 
-#fileInput {
+.drop-title{
 
-  display: none;
+  font-size:18px;
 }
 
-.file {
+.drop-sub{
 
-  margin-top: 10px;
+  color:var(--muted);
 
-  color: #8794a6;
+  font-size:12px;
 
-  font-size: 13px;
-
-  word-break: break-all;
+  margin-top:8px;
 }
 
-button {
+#fileInput{
 
-  width: 100%;
-
-  border: 0;
-
-  border-radius: 13px;
-
-  padding: 15px;
-
-  margin-top: 18px;
-
-  color: white;
-
-  background: #1683ff;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  cursor: pointer;
+  display:none;
 }
 
-button:hover {
+.info{
 
-  background: #006ee5;
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:10px;
+
+  margin-top:15px;
 }
 
-button:disabled {
-
-  opacity: .5;
-
-  cursor: not-allowed;
-}
-
-.status {
-
-  text-align: center;
-
-  margin-top: 15px;
-
-  color: #aeb8c7;
-
-  font-size: 14px;
-}
-
-.result {
-
-  display: none;
-
-  margin-top: 20px;
-
-  padding: 17px;
-
-  border-radius: 15px;
+.info-item{
 
   background:
-    rgba(0,0,0,.25);
+    rgba(255,255,255,.055);
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:15px;
+
+  padding:12px;
 }
 
-.success {
+.label{
 
-  font-weight: 700;
+  color:#aeb4c7;
 
-  margin-bottom: 10px;
+  font-size:11px;
+
+  margin-bottom:5px;
 }
 
-.url {
+.value{
 
-  padding: 13px;
+  font-size:13px;
 
-  border-radius: 10px;
+  word-break:break-word;
+}
+
+button{
+
+  width:100%;
+
+  border:0;
+
+  border-radius:16px;
+
+  padding:15px;
+
+  margin-top:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  color:#07101d;
+
+  font:inherit;
+
+  font-size:16px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 12px 30px
+    rgba(117,216,255,.18);
+}
+
+button:disabled{
+
+  opacity:.5;
+
+  cursor:not-allowed;
+}
+
+.status{
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+  min-height:20px;
+
+  margin-top:13px;
+}
+
+.result{
+
+  display:none;
+
+  margin-top:18px;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  background:
+    rgba(0,0,0,.24);
+
+  border:
+    1px solid
+    rgba(117,216,255,.18);
+}
+
+.result-title{
+
+  margin-bottom:10px;
+}
+
+.url{
+
+  padding:13px;
+
+  border-radius:12px;
+
+  background:
+    rgba(255,255,255,.07);
+
+  color:#8fe2ff;
+
+  font-size:12px;
+
+  line-height:1.5;
+
+  word-break:break-all;
+
+  user-select:all;
+}
+
+.preview{
+
+  display:none;
+
+  width:100%;
+
+  max-height:360px;
+
+  object-fit:contain;
+
+  border-radius:15px;
+
+  margin-top:14px;
+
+  background:#05060b;
+}
+
+.copy{
+
+  background:
+    rgba(255,255,255,.11);
+
+  color:white;
+
+  box-shadow:none;
+}
+
+.reset{
 
   background:
     rgba(255,255,255,.08);
 
-  color: #55adff;
+  color:white;
 
-  font-size: 13px;
-
-  word-break: break-all;
+  box-shadow:none;
 }
 
-.copy {
+.footer{
 
-  margin-top: 10px;
+  text-align:center;
 
-  background:
-    rgba(255,255,255,.12);
+  color:#858ba0;
+
+  font-size:11px;
+
+  margin-top:18px;
 }
 
-.preview {
+@media(max-width:560px){
 
-  display: none;
+  .info{
 
-  width: 100%;
+    grid-template-columns:1fr;
+  }
 
-  max-height: 300px;
+  .card{
 
-  object-fit: contain;
+    padding:15px;
+  }
 
-  border-radius: 12px;
+  .wrap{
 
-  margin-top: 15px;
-}
+    padding-top:10px;
+  }
 
-.footer {
-
-  text-align: center;
-
-  color: #657184;
-
-  font-size: 12px;
-
-  margin-top: 20px;
 }
 
 </style>
@@ -264,181 +475,636 @@ button:disabled {
 
 <body>
 
-<div class="container">
+<main class="wrap">
 
-  <div class="logo">
-    Azerst Image VN
-  </div>
+<section class="hero">
 
-  <div class="subtitle">
-    Upload ảnh miễn phí • Nhận URL trực tiếp
-  </div>
+<img
+  class="logo"
+  src="https://img-ffvn-tgm-com.vercel.app/images/3rYKxqbI.png"
+  alt="Azerst"
+>
 
-  <label
-    class="upload"
-    for="fileInput"
-  >
+<h1>
+Azerst - CÔNG CỤ CHÈN ẢNH TẠO LINK URL
+</h1>
 
-    <div class="icon">
-      🖼️
-    </div>
+<p class="desc">
+Công cụ chèn ảnh và tạo link URL trực tiếp nhanh chóng từ Azerst.
+Hỗ trợ Android, iPhone và máy tính.
+</p>
 
-    <div>
-      Chọn hình ảnh để upload
-    </div>
+</section>
 
-    <div
-      class="file"
-      id="fileName"
-    >
-      JPG • PNG • WEBP • GIF
-    </div>
 
-  </label>
+<section class="card">
 
-  <input
-    id="fileInput"
-    type="file"
-    accept="image/jpeg,image/png,image/webp,image/gif"
-  >
+<label
+  class="drop"
+  id="drop"
+  for="fileInput"
+>
 
-  <button
-    id="uploadButton"
-  >
-    🚀 Upload hình ảnh
-  </button>
+<div class="drop-icon">
+🌌
+</div>
 
-  <div
-    class="status"
-    id="status"
-  ></div>
+<div class="drop-title">
+Chọn hoặc kéo thả hình ảnh
+</div>
 
-  <div
-    class="result"
-    id="result"
-  >
+<div class="drop-sub">
+JPG • JPEG • PNG • WEBP • GIF — tối đa 10MB
+</div>
 
-    <div class="success">
-      ✅ Upload thành công
-    </div>
+<div
+  class="drop-sub"
+  id="fileName"
+>
+Chưa chọn ảnh
+</div>
 
-    <div
-      class="url"
-      id="url"
-    ></div>
+</label>
 
-    <img
-      class="preview"
-      id="preview"
-    >
 
-    <button
-      class="copy"
-      id="copyButton"
-    >
-      📋 Sao chép URL
-    </button>
+<input
+  id="fileInput"
+  type="file"
+  accept="image/*"
+>
 
-  </div>
 
-  <div class="footer">
-    Azerst Image VN
-  </div>
+<div class="info">
+
+<div class="info-item">
+
+<div class="label">
+TÊN FILE
+</div>
+
+<div
+  class="value"
+  id="name"
+>
+—
+</div>
 
 </div>
 
+
+<div class="info-item">
+
+<div class="label">
+DUNG LƯỢNG
+</div>
+
+<div
+  class="value"
+  id="size"
+>
+—
+</div>
+
+</div>
+
+
+<div class="info-item">
+
+<div class="label">
+ĐỊNH DẠNG
+</div>
+
+<div
+  class="value"
+  id="type"
+>
+—
+</div>
+
+</div>
+
+</div>
+
+
+<button
+  id="upload"
+  disabled
+>
+🚀 TẠO LINK URL
+</button>
+
+
+<div
+  class="status"
+  id="status"
+></div>
+
+
+<div
+  class="result"
+  id="result"
+>
+
+<div class="result-title">
+✅ LINK URL ẢNH CỦA BẠN
+</div>
+
+<div
+  class="url"
+  id="url"
+></div>
+
+
+<img
+  class="preview"
+  id="preview"
+  alt="Ảnh đã upload"
+>
+
+
+<button
+  class="copy"
+  id="copy"
+>
+📋 SAO CHÉP URL
+</button>
+
+
+<button
+  class="reset"
+  id="reset"
+>
+↻ CHỌN ẢNH KHÁC
+</button>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+Azerst Image VN • Tự động chuyển ảnh thành PNG
+</div>
+
+</main>
+
+
 <script>
 
-const fileInput =
-  document.getElementById(
-    "fileInput"
-  );
+const input =
+document.getElementById("fileInput");
 
-const fileName =
-  document.getElementById(
-    "fileName"
-  );
+const drop =
+document.getElementById("drop");
 
-const uploadButton =
-  document.getElementById(
-    "uploadButton"
-  );
+const upload =
+document.getElementById("upload");
 
 const status =
-  document.getElementById(
-    "status"
-  );
+document.getElementById("status");
 
 const result =
-  document.getElementById(
-    "result"
-  );
+document.getElementById("result");
 
-const url =
-  document.getElementById(
-    "url"
-  );
+const urlEl =
+document.getElementById("url");
 
 const preview =
-  document.getElementById(
-    "preview"
-  );
+document.getElementById("preview");
 
-const copyButton =
-  document.getElementById(
-    "copyButton"
-  );
+const copy =
+document.getElementById("copy");
+
+const reset =
+document.getElementById("reset");
+
+const nameEl =
+document.getElementById("name");
+
+const sizeEl =
+document.getElementById("size");
+
+const typeEl =
+document.getElementById("type");
+
+const fileName =
+document.getElementById("fileName");
 
 
-fileInput.addEventListener(
+let selectedFile = null;
+
+
+function formatBytes(bytes){
+
+  if(bytes < 1024)
+    return bytes + " B";
+
+  if(bytes < 1024 * 1024)
+    return (bytes / 1024).toFixed(1) + " KB";
+
+  return (bytes / 1024 / 1024).toFixed(2) + " MB";
+}
+
+
+function setFile(file){
+
+  if(!file)
+    return;
+
+  if(!file.type.startsWith("image/")){
+
+    status.textContent =
+      "❌ File này không phải hình ảnh.";
+
+    return;
+  }
+
+
+  if(file.size > 10 * 1024 * 1024){
+
+    status.textContent =
+      "❌ Hình ảnh vượt quá 10MB.";
+
+    return;
+  }
+
+
+  selectedFile = file;
+
+
+  nameEl.textContent =
+    file.name;
+
+
+  sizeEl.textContent =
+    formatBytes(file.size);
+
+
+  typeEl.textContent =
+    file.type || "image/*";
+
+
+  fileName.textContent =
+    file.name;
+
+
+  status.textContent =
+    "Đã chọn ảnh. Sẵn sàng tạo URL.";
+
+
+  upload.disabled = false;
+
+
+  result.style.display =
+    "none";
+}
+
+
+input.addEventListener(
   "change",
-  function () {
+  () => setFile(input.files[0])
+);
 
-    if (!this.files.length) {
 
-      fileName.textContent =
-        "JPG • PNG • WEBP • GIF";
+[
+  "dragenter",
+  "dragover"
+].forEach(event => {
 
-      return;
+  drop.addEventListener(
+    event,
+    e => {
+
+      e.preventDefault();
+
+      drop.classList.add("drag");
+
     }
+  );
 
-    fileName.textContent =
-      this.files[0].name;
+});
+
+
+[
+  "dragleave",
+  "drop"
+].forEach(event => {
+
+  drop.addEventListener(
+    event,
+    e => {
+
+      e.preventDefault();
+
+      drop.classList.remove("drag");
+
+    }
+  );
+
+});
+
+
+drop.addEventListener(
+  "drop",
+  e => {
+
+    setFile(
+      e.dataTransfer.files[0]
+    );
+
   }
 );
 
 
-uploadButton.addEventListener(
-  "click",
-  async function () {
+function imageToPng(file){
 
-    const file =
-      fileInput.files[0];
+  return new Promise(
+    (resolve,reject) => {
 
-    if (!file) {
+      const img =
+        new Image();
 
-      status.textContent =
-        "❌ Vui lòng chọn ảnh.";
+      const objectUrl =
+        URL.createObjectURL(file);
 
-      return;
+
+      img.onload = () => {
+
+        try {
+
+          const canvas =
+            document.createElement(
+              "canvas"
+            );
+
+
+          canvas.width =
+            img.naturalWidth;
+
+
+          canvas.height =
+            img.naturalHeight;
+
+
+          const ctx =
+            canvas.getContext(
+              "2d"
+            );
+
+
+          ctx.drawImage(
+            img,
+            0,
+            0
+          );
+
+
+          canvas.toBlob(
+            blob => {
+
+              URL.revokeObjectURL(
+                objectUrl
+              );
+
+
+              if(!blob){
+
+                reject(
+                  new Error(
+                    "Không thể chuyển ảnh sang PNG."
+                  )
+                );
+
+                return;
+              }
+
+
+              resolve(blob);
+
+            },
+            "image/png"
+          );
+
+
+        } catch(error){
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+
+          reject(error);
+        }
+
+      };
+
+
+      img.onerror = () => {
+
+        URL.revokeObjectURL(
+          objectUrl
+        );
+
+        reject(
+          new Error(
+            "Không đọc được hình ảnh."
+          )
+        );
+
+      };
+
+
+      img.src =
+        objectUrl;
+
     }
+  );
 
-    const formData =
-      new FormData();
+}
 
-    formData.append(
-      "image",
-      file
-    );
 
-    uploadButton.disabled =
-      true;
+upload.addEventListener(
+  "click",
+  async () => {
 
-    uploadButton.textContent =
-      "⏳ Đang upload...";
+    if(!selectedFile)
+      return;
+
+
+    upload.disabled = true;
+
+
+    upload.textContent =
+      "⏳ ĐANG TẠO PNG & UPLOAD...";
+
 
     status.textContent =
-      "Đang xử lý...";
+      "Đang chuyển ảnh sang PNG...";
+
+
+    try {
+
+      const pngBlob =
+        await imageToPng(
+          selectedFile
+        );
+
+
+      if(
+        pngBlob.size >
+        10 * 1024 * 1024
+      ){
+
+        throw new Error(
+          "Ảnh PNG sau khi chuyển vượt quá 10MB."
+        );
+
+      }
+
+
+      const form =
+        new FormData();
+
+
+      form.append(
+        "image",
+        pngBlob,
+        "image.png"
+      );
+
+
+      status.textContent =
+        "Đang upload hình ảnh...";
+
+
+      const response =
+        await fetch(
+          "/api/upload",
+          {
+            method:"POST",
+            body:form
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if(
+        !response.ok ||
+        !data.ok
+      ){
+
+        throw new Error(
+          data.error ||
+          "Upload thất bại."
+        );
+
+      }
+
+
+      urlEl.textContent =
+        data.url;
+
+
+      preview.src =
+        data.url;
+
+
+      result.style.display =
+        "block";
+
+
+      preview.style.display =
+        "block";
+
+
+      status.textContent =
+        "✅ Tạo URL thành công!";
+
+
+      result.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+      });
+
+
+    } catch(error){
+
+      status.textContent =
+        "❌ " +
+        (
+          error.message ||
+          "Upload thất bại."
+        );
+
+    } finally {
+
+      upload.disabled =
+        false;
+
+
+      upload.textContent =
+        "🚀 TẠO LINK URL";
+
+    }
+
+  }
+);
+
+
+copy.addEventListener(
+  "click",
+  async () => {
+
+    const value =
+      urlEl.textContent;
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        value
+      );
+
+
+      copy.textContent =
+        "✅ ĐÃ SAO CHÉP";
+
+
+      setTimeout(
+        () => {
+
+          copy.textContent =
+            "📋 SAO CHÉP URL";
+
+        },
+        1500
+      );
+
+
+    } catch {
+
+      window.prompt(
+        "Sao chép URL:",
+        value
+      );
+
+    }
+
+  }
+);
+
+
+reset.addEventListener(
+  "click",
+  () => {
+
+    input.value = "";
+
+    selectedFile = null;
+
+    upload.disabled = true;
 
     result.style.display =
       "none";
@@ -446,95 +1112,25 @@ uploadButton.addEventListener(
     preview.style.display =
       "none";
 
-    try {
+    status.textContent = "";
 
-      const response =
-        await fetch(
-          "/api/upload",
-          {
-            method: "POST",
-            body: formData
-          }
-        );
+    fileName.textContent =
+      "Chưa chọn ảnh";
 
-      const data =
-        await response.json();
+    nameEl.textContent =
+      "—";
 
-      if (
-        !response.ok ||
-        !data.ok
-      ) {
+    sizeEl.textContent =
+      "—";
 
-        throw new Error(
-          data.error ||
-          "Upload thất bại"
-        );
-      }
-
-      url.textContent =
-        data.url;
-
-      preview.src =
-        data.url;
-
-      result.style.display =
-        "block";
-
-      preview.style.display =
-        "block";
-
-      status.textContent =
-        "✅ Hoàn tất!";
-
-    } catch (error) {
-
-      status.textContent =
-        "❌ " + error.message;
-
-    } finally {
-
-      uploadButton.disabled =
-        false;
-
-      uploadButton.textContent =
-        "🚀 Upload hình ảnh";
-    }
-
-  }
-);
+    typeEl.textContent =
+      "—";
 
 
-copyButton.addEventListener(
-  "click",
-  async function () {
-
-    const text =
-      url.textContent;
-
-    try {
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-      copyButton.textContent =
-        "✅ Đã sao chép URL";
-
-      setTimeout(
-        () => {
-
-          copyButton.textContent =
-            "📋 Sao chép URL";
-
-        },
-        1500
-      );
-
-    } catch {
-
-      alert(text);
-
-    }
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
 
   }
 );
@@ -542,5 +1138,4 @@ copyButton.addEventListener(
 </script>
 
 </body>
-
 </html>
