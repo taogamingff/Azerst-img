@@ -9,6 +9,12 @@ const ALLOWED_TYPES = [
   "image/gif"
 ];
 
+function validPathname(pathname) {
+  return /^[a-z0-9]{6}\.(png|jpg|webp|gif)$/i.test(
+    pathname
+  );
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -28,52 +34,46 @@ export default async function handler(req, res) {
         let payload = {};
 
         try {
-          payload = clientPayload
-            ? JSON.parse(clientPayload)
-            : {};
+          if (clientPayload) {
+            payload = JSON.parse(clientPayload);
+          }
         } catch {
           payload = {};
         }
 
-        const type = payload.contentType || "";
-        const size = Number(payload.size || 0);
+        const contentType =
+          payload.contentType || "";
 
-        if (!ALLOWED_TYPES.includes(type)) {
+        const size =
+          Number(payload.size || 0);
+
+        if (!ALLOWED_TYPES.includes(contentType)) {
           throw new Error(
-            "Chỉ hỗ trợ PNG, JPG, WEBP và GIF."
+            "Định dạng không được hỗ trợ."
           );
         }
 
         if (size > MAX_FILE_SIZE) {
           throw new Error(
-            "Dung lượng tối đa là 65 GB."
+            "Dung lượng ảnh tối đa là 65 GB."
           );
         }
 
-        /*
-         * pathname được tạo từ trình duyệt.
-         * Ví dụ:
-         *
-         * 7fas39.png
-         */
-
-        if (
-          !/^[a-z0-9]{6}\.(png|jpg|webp|gif)$/i.test(
-            pathname
-          )
-        ) {
+        if (!validPathname(pathname)) {
           throw new Error(
             "Tên file không hợp lệ."
           );
         }
 
         return {
-          allowedContentTypes: ALLOWED_TYPES,
+          allowedContentTypes:
+            ALLOWED_TYPES,
 
           maximumSizeInBytes:
             MAX_FILE_SIZE,
 
-          addRandomSuffix: false,
+          addRandomSuffix:
+            false,
 
           cacheControlMaxAge:
             31536000
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
         blob
       }) => {
         console.log(
-          "Azerst upload completed:",
+          "Azerst upload:",
           blob.url
         );
       }
@@ -94,14 +94,14 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error(
-      "Azerst upload error:",
+      "UPLOAD ERROR:",
       error
     );
 
     return res.status(400).json({
       error:
         error?.message ||
-        "Upload thất bại."
+        "Không thể upload ảnh."
     });
   }
 }
