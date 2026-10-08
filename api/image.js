@@ -1,52 +1,38 @@
-import { handleUpload } from "@vercel/blob/client";
+import { head } from "@vercel/blob";
 
 export default async function handler(request, response) {
-  if (request.method !== "POST") {
-    return response.status(405).json({
-      error: "Method Not Allowed"
-    });
-  }
-
   try {
-    const body = await request.json();
+    const url = new URL(request.url);
 
-    const jsonResponse = await handleUpload({
-      body,
-      request,
+    const name = url.searchParams.get("name");
 
-      onBeforeGenerateToken: async (pathname, clientPayload) => {
-        const allowedTypes = [
-          "image/png",
-          "image/jpeg",
-          "image/webp",
-          "image/gif"
-        ];
+    if (!name) {
+      return response.status(400).send("Missing image name");
+    }
 
-        return {
-          allowedContentTypes: allowedTypes,
+    // Chỉ cho phép tên dạng:
+    // abc123.png
+    // 7fas39.jpg
+    // a82k1z.webp
+    // x91abc.gif
+    const validName =
+      /^[a-z0-9]{6}\.(png|jpg|jpeg|webp|gif)$/i.test(name);
 
-          // Giữ nguyên tên 6 ký tự do website tạo
-          addRandomSuffix: false,
+    if (!validName) {
+      return response.status(400).send("Invalid image name");
+    }
 
-          tokenPayload: JSON.stringify({
-            pathname,
-            clientPayload: clientPayload || null
-          })
-        };
-      },
+    const blob = await head(name);
 
-      onUploadCompleted: async ({ blob }) => {
-        console.log("Azerst upload completed:", blob.url);
-      }
-    });
+    if (!blob || !blob.url) {
+      return response.status(404).send("Image not found");
+    }
 
-    return response.status(200).json(jsonResponse);
+    return response.redirect(blob.url, 302);
 
   } catch (error) {
-    console.error("UPLOAD ERROR:", error);
+    console.error("IMAGE ERROR:", error);
 
-    return response.status(400).json({
-      error: error?.message || "Upload failed"
-    });
+    return response.status(404).send("Image not found");
   }
 }
