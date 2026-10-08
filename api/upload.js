@@ -1,75 +1,125 @@
-import { put } from "@vercel/blob";
-import crypto from "crypto";
+import { handleUpload } from "@vercel/blob/client";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const ALLOWED_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/gif"
+];
 
-function makeFilename() {
-  return `${crypto.randomBytes(12).toString("hex")}.png`;
+const MAX_FILE_SIZE = 65 * 1024 * 1024 * 1024;
+
+function randomName(length = 6) {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = new Uint8Array(length);
+
+  crypto.getRandomValues(bytes);
+
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    result += chars[bytes[i] % chars.length];
+  }
+
+  return result;
+}
+
+function getExtension(contentType) {
+  switch (contentType) {
+    case "image/png":
+      return ".png";
+
+    case "image/jpeg":
+      return ".jpg";
+
+    case "image/webp":
+      return ".webp";
+
+    case "image/gif":
+      return ".gif";
+
+    default:
+      return "";
+  }
 }
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      error: "Method Not Allowed"
+    });
+  }
+
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({
-        ok: false,
-        error: "Method Not Allowed"
-      });
-    }
+    const body = req.body || {};
 
-    const formData = await req.formData();
-    const file = formData.get("image");
+    /*
+     * Client upload flow.
+     */
+    const response = await handleUpload({
+      body,
+      request: req,
 
-    if (!file || typeof file === "string") {
-      return res.status(400).json({
-        ok: false,
-        error: "Không nhận được hình ảnh."
-      });
-    }
+      onBeforeGenerateToken: async (pathname, clientPayload) => {
+        let data = {};
 
-    if (file.type !== "image/png") {
-      return res.status(400).json({
-        ok: false,
-        error: "Server chỉ nhận PNG. Hãy dùng giao diện website để tự chuyển ảnh sang PNG."
-      });
-    }
+        try {
+          data = clientPayload
+            ? JSON.parse(clientPayload)
+            : {};
+        } catch {
+          data = {};
+        }
 
-    if (!file.size || file.size > MAX_FILE_SIZE) {
-      return res.status(413).json({
-        ok: false,
-        error: "Dung lượng ảnh tối đa là 10MB."
-      });
-    }
+        const contentType = data.contentType || "";
 
-    const filename = makeFilename();
+        if (!ALLOWED_TYPES.includes(contentType)) {
+          throw new Error("Định dạng ảnh không được hỗ trợ.");
+        }
 
-    await put(`images/${filename}`, file, {
-      access: "public",
-      contentType: "image/png",
-      addRandomSuffix: false
+        const size = Number(data.size || 0);
+
+        if (size > MAX_FILE_SIZE) {
+          throw new Error("Dung lượng tối đa là 65 GB.");
+        }
+
+        const extension = getExtension(contentType);
+
+        /*
+         * Tên file cuối cùng:
+         * 6 ký tự + extension
+         *
+         * Ví dụ:
+         * 7fas39.png
+         */
+        const finalName = `${randomName(6)}${extension}`;
+
+        return {
+          allowedContentTypes: ALLOWED_TYPES,
+          maximumSizeInBytes: MAX_FILE_SIZE,
+
+          addRandomSuffix: false,
+
+          tokenPayload: JSON.stringify({
+            originalName: data.originalName || "",
+            finalName
+          })
+        };
+      },
+
+      onUploadCompleted: async ({ blob, tokenPayload }) => {
+        console.log("Upload completed:", blob.url);
+        console.log("Payload:", tokenPayload);
+      }
     });
 
-    const baseUrl =
-      process.env.IMAGE_BASE_URL ||
-      `https://${req.headers.host}`;
-
-    const url = `${baseUrl}/${filename}`;
-
-    return res.status(200).json({
-      ok: true,
-      url,
-      filename,
-      mimeType: "image/png",
-      size: file.size,
-      createdAt: new Date().toISOString()
-    });
+    return res.status(200).json(response);
 
   } catch (error) {
-    console.error("UPLOAD_ERROR:", error);
+    console.error(error);
 
-    return res.status(500).json({
-      ok: false,
-      error: "Upload ảnh thất bại.",
-      detail: error?.message || "Unknown error"
+    return res.status(400).json({
+      error: error?.message || "Upload thất bại."
     });
   }
 }
