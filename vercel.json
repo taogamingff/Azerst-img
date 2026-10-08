@@ -3,20 +3,14 @@
 
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/index.html"
-    },
-
-    {
-      "source": "/:filename([a-z0-9]{6}\\.(png|jpg|webp|gif))",
-      "destination": "https://YOUR_BLOB_HOST/:filename"
+      "source": "/:name([a-z0-9]{6}\\.(png|jpg|webp|gif))",
+      "destination": "/api/image?name=:name"
     }
   ],
 
   "headers": [
     {
-      "source": "/:filename([a-z0-9]{6}\\.(png|jpg|webp|gif))",
-
+      "source": "/:name([a-z0-9]{6}\\.(png|jpg|webp|gif))",
       "headers": [
         {
           "key": "Cache-Control",
