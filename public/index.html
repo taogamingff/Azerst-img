@@ -1,400 +1,424 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta charset="UTF-8">
 
-  <title>Azerst Image VN</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <meta
-    name="description"
-    content="Azerst Image VN - Upload hình ảnh và nhận URL trực tiếp"
-  >
+<title>Azerst Image VN</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+* {
+  box-sizing: border-box;
+}
 
-      background:
-        radial-gradient(
-          circle at top,
-          #1d2a3a,
-          #080b10 55%
-        );
+body {
 
-      color: white;
+  margin: 0;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  min-height: 100vh;
 
-      padding: 20px;
-    }
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    .container {
-      width: 100%;
-      max-width: 520px;
+  color: white;
 
-      background: rgba(255, 255, 255, 0.07);
+  background:
+    radial-gradient(
+      circle at top,
+      #1c2d42,
+      #07090d 60%
+    );
 
-      border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
 
-      backdrop-filter: blur(20px);
+  justify-content: center;
 
-      border-radius: 24px;
+  align-items: center;
 
-      padding: 28px;
+  padding: 20px;
+}
 
-      box-shadow:
-        0 20px 60px rgba(0,0,0,0.45);
-    }
+.container {
 
-    .logo {
-      text-align: center;
-      font-size: 30px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
+  width: 100%;
 
-    .subtitle {
-      text-align: center;
-      color: #aeb8c7;
-      margin-bottom: 28px;
-    }
+  max-width: 520px;
 
-    .upload-box {
-      border: 2px dashed rgba(255,255,255,0.2);
+  padding: 28px;
 
-      border-radius: 18px;
+  border-radius: 24px;
 
-      padding: 35px 20px;
+  background:
+    rgba(255,255,255,0.07);
 
-      text-align: center;
+  border:
+    1px solid rgba(255,255,255,0.12);
 
-      cursor: pointer;
+  box-shadow:
+    0 20px 70px
+    rgba(0,0,0,0.5);
 
-      transition: 0.2s;
-    }
+  backdrop-filter:
+    blur(20px);
+}
 
-    .upload-box:hover {
-      border-color: #4da3ff;
-      background: rgba(77,163,255,0.06);
-    }
+.logo {
 
-    .upload-icon {
-      font-size: 48px;
-      margin-bottom: 10px;
-    }
+  text-align: center;
 
-    input[type="file"] {
-      display: none;
-    }
+  font-size: 30px;
 
-    .file-name {
-      margin-top: 12px;
-      color: #b8c2d1;
-      font-size: 14px;
-      word-break: break-all;
-    }
+  font-weight: 800;
 
-    .api-box {
-      margin-top: 20px;
-    }
+  margin-bottom: 7px;
+}
 
-    .api-box label {
-      display: block;
-      margin-bottom: 8px;
-      color: #b8c2d1;
-      font-size: 14px;
-    }
+.subtitle {
 
-    .api-box input {
-      width: 100%;
-      padding: 13px;
+  text-align: center;
 
-      border: 1px solid rgba(255,255,255,0.12);
+  color: #9ca9ba;
 
-      border-radius: 12px;
+  margin-bottom: 25px;
+}
 
-      background: rgba(0,0,0,0.25);
+.upload {
 
-      color: white;
+  display: block;
 
-      outline: none;
-    }
+  padding: 40px 20px;
 
-    button {
-      width: 100%;
+  text-align: center;
 
-      margin-top: 20px;
+  border:
+    2px dashed
+    rgba(255,255,255,0.2);
 
-      padding: 15px;
+  border-radius: 18px;
 
-      border: 0;
+  cursor: pointer;
 
-      border-radius: 13px;
+  transition: .2s;
+}
 
-      background: #1683ff;
+.upload:hover {
 
-      color: white;
+  border-color: #3498ff;
 
-      font-size: 16px;
+  background:
+    rgba(52,152,255,.06);
+}
 
-      font-weight: 700;
+.icon {
 
-      cursor: pointer;
+  font-size: 50px;
 
-      transition: 0.2s;
-    }
+  margin-bottom: 12px;
+}
 
-    button:hover {
-      background: #006fe6;
-    }
+#fileInput {
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+  display: none;
+}
 
-    .result {
-      display: none;
+.file {
 
-      margin-top: 20px;
+  margin-top: 10px;
 
-      padding: 15px;
+  color: #8794a6;
 
-      border-radius: 14px;
+  font-size: 13px;
 
-      background: rgba(0,0,0,0.25);
-    }
+  word-break: break-all;
+}
 
-    .result-title {
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+button {
 
-    .url {
-      display: block;
+  width: 100%;
 
-      padding: 12px;
+  border: 0;
 
-      border-radius: 10px;
+  border-radius: 13px;
 
-      background: rgba(255,255,255,0.08);
+  padding: 15px;
 
-      color: #69b3ff;
+  margin-top: 18px;
 
-      word-break: break-all;
+  color: white;
 
-      font-size: 14px;
-    }
+  background: #1683ff;
 
-    .copy {
-      margin-top: 10px;
+  font-size: 16px;
 
-      padding: 11px;
+  font-weight: 700;
 
-      background: rgba(255,255,255,0.1);
+  cursor: pointer;
+}
 
-      font-size: 14px;
-    }
+button:hover {
 
-    .status {
-      margin-top: 15px;
+  background: #006ee5;
+}
 
-      text-align: center;
+button:disabled {
 
-      color: #aeb8c7;
+  opacity: .5;
 
-      font-size: 14px;
-    }
+  cursor: not-allowed;
+}
 
-    .footer {
-      margin-top: 22px;
+.status {
 
-      text-align: center;
+  text-align: center;
 
-      color: #718096;
+  margin-top: 15px;
 
-      font-size: 12px;
-    }
-  </style>
+  color: #aeb8c7;
+
+  font-size: 14px;
+}
+
+.result {
+
+  display: none;
+
+  margin-top: 20px;
+
+  padding: 17px;
+
+  border-radius: 15px;
+
+  background:
+    rgba(0,0,0,.25);
+}
+
+.success {
+
+  font-weight: 700;
+
+  margin-bottom: 10px;
+}
+
+.url {
+
+  padding: 13px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  color: #55adff;
+
+  font-size: 13px;
+
+  word-break: break-all;
+}
+
+.copy {
+
+  margin-top: 10px;
+
+  background:
+    rgba(255,255,255,.12);
+}
+
+.preview {
+
+  display: none;
+
+  width: 100%;
+
+  max-height: 300px;
+
+  object-fit: contain;
+
+  border-radius: 12px;
+
+  margin-top: 15px;
+}
+
+.footer {
+
+  text-align: center;
+
+  color: #657184;
+
+  font-size: 12px;
+
+  margin-top: 20px;
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="logo">
-      Azerst Image VN
+  <div class="logo">
+    Azerst Image VN
+  </div>
+
+  <div class="subtitle">
+    Upload ảnh miễn phí • Nhận URL trực tiếp
+  </div>
+
+  <label
+    class="upload"
+    for="fileInput"
+  >
+
+    <div class="icon">
+      🖼️
     </div>
 
-    <div class="subtitle">
-      Upload ảnh → Nhận URL trực tiếp
+    <div>
+      Chọn hình ảnh để upload
     </div>
-
-    <label
-      class="upload-box"
-      for="imageInput"
-    >
-
-      <div class="upload-icon">
-        🖼️
-      </div>
-
-      <div>
-        Nhấn để chọn hình ảnh
-      </div>
-
-      <div class="file-name" id="fileName">
-        JPG • PNG • WEBP • GIF
-      </div>
-
-    </label>
-
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/jpeg,image/png,image/webp,image/gif"
-    >
-
-    <div class="api-box">
-
-      <label>
-        API Key
-      </label>
-
-      <input
-        type="password"
-        id="apiKey"
-        placeholder="Nhập API Key..."
-      >
-
-    </div>
-
-    <button
-      id="uploadButton"
-    >
-      Upload hình ảnh
-    </button>
 
     <div
-      class="status"
-      id="status"
+      class="file"
+      id="fileName"
+    >
+      JPG • PNG • WEBP • GIF
+    </div>
+
+  </label>
+
+  <input
+    id="fileInput"
+    type="file"
+    accept="image/jpeg,image/png,image/webp,image/gif"
+  >
+
+  <button
+    id="uploadButton"
+  >
+    🚀 Upload hình ảnh
+  </button>
+
+  <div
+    class="status"
+    id="status"
+  ></div>
+
+  <div
+    class="result"
+    id="result"
+  >
+
+    <div class="success">
+      ✅ Upload thành công
+    </div>
+
+    <div
+      class="url"
+      id="url"
     ></div>
 
-    <div
-      class="result"
-      id="result"
+    <img
+      class="preview"
+      id="preview"
     >
 
-      <div class="result-title">
-        ✅ Upload thành công
-      </div>
-
-      <div
-        class="url"
-        id="imageUrl"
-      ></div>
-
-      <button
-        class="copy"
-        id="copyButton"
-      >
-        📋 Sao chép URL
-      </button>
-
-    </div>
-
-    <div class="footer">
-      Azerst Image VN
-    </div>
+    <button
+      class="copy"
+      id="copyButton"
+    >
+      📋 Sao chép URL
+    </button>
 
   </div>
 
+  <div class="footer">
+    Azerst Image VN
+  </div>
+
+</div>
+
 <script>
 
-const imageInput =
-  document.getElementById("imageInput");
+const fileInput =
+  document.getElementById(
+    "fileInput"
+  );
 
 const fileName =
-  document.getElementById("fileName");
-
-const apiKey =
-  document.getElementById("apiKey");
+  document.getElementById(
+    "fileName"
+  );
 
 const uploadButton =
-  document.getElementById("uploadButton");
+  document.getElementById(
+    "uploadButton"
+  );
 
 const status =
-  document.getElementById("status");
+  document.getElementById(
+    "status"
+  );
 
 const result =
-  document.getElementById("result");
+  document.getElementById(
+    "result"
+  );
 
-const imageUrl =
-  document.getElementById("imageUrl");
+const url =
+  document.getElementById(
+    "url"
+  );
+
+const preview =
+  document.getElementById(
+    "preview"
+  );
 
 const copyButton =
-  document.getElementById("copyButton");
+  document.getElementById(
+    "copyButton"
+  );
 
 
-imageInput.addEventListener(
+fileInput.addEventListener(
   "change",
-  () => {
+  function () {
 
-    if (!imageInput.files.length) {
+    if (!this.files.length) {
+
       fileName.textContent =
         "JPG • PNG • WEBP • GIF";
 
       return;
     }
 
-    const file =
-      imageInput.files[0];
-
     fileName.textContent =
-      file.name;
-
+      this.files[0].name;
   }
 );
 
 
 uploadButton.addEventListener(
   "click",
-  async () => {
+  async function () {
 
     const file =
-      imageInput.files[0];
-
-    const key =
-      apiKey.value.trim();
+      fileInput.files[0];
 
     if (!file) {
 
       status.textContent =
-        "❌ Vui lòng chọn hình ảnh.";
-
-      return;
-    }
-
-    if (!key) {
-
-      status.textContent =
-        "❌ Vui lòng nhập API Key.";
+        "❌ Vui lòng chọn ảnh.";
 
       return;
     }
@@ -414,9 +438,12 @@ uploadButton.addEventListener(
       "⏳ Đang upload...";
 
     status.textContent =
-      "";
+      "Đang xử lý...";
 
     result.style.display =
+      "none";
+
+    preview.style.display =
       "none";
 
     try {
@@ -426,11 +453,6 @@ uploadButton.addEventListener(
           "/api/upload",
           {
             method: "POST",
-
-            headers: {
-              "x-api-key": key
-            },
-
             body: formData
           }
         );
@@ -438,23 +460,31 @@ uploadButton.addEventListener(
       const data =
         await response.json();
 
-      if (!response.ok || !data.ok) {
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
 
         throw new Error(
           data.error ||
           "Upload thất bại"
         );
-
       }
 
-      imageUrl.textContent =
+      url.textContent =
+        data.url;
+
+      preview.src =
         data.url;
 
       result.style.display =
         "block";
 
+      preview.style.display =
+        "block";
+
       status.textContent =
-        "Upload thành công!";
+        "✅ Hoàn tất!";
 
     } catch (error) {
 
@@ -467,8 +497,7 @@ uploadButton.addEventListener(
         false;
 
       uploadButton.textContent =
-        "Upload hình ảnh";
-
+        "🚀 Upload hình ảnh";
     }
 
   }
@@ -477,27 +506,35 @@ uploadButton.addEventListener(
 
 copyButton.addEventListener(
   "click",
-  async () => {
+  async function () {
 
-    const url =
-      imageUrl.textContent;
+    const text =
+      url.textContent;
 
-    await navigator.clipboard.writeText(
-      url
-    );
+    try {
 
-    copyButton.textContent =
-      "✅ Đã sao chép";
+      await navigator.clipboard.writeText(
+        text
+      );
 
-    setTimeout(
-      () => {
+      copyButton.textContent =
+        "✅ Đã sao chép URL";
 
-        copyButton.textContent =
-          "📋 Sao chép URL";
+      setTimeout(
+        () => {
 
-      },
-      1500
-    );
+          copyButton.textContent =
+            "📋 Sao chép URL";
+
+        },
+        1500
+      );
+
+    } catch {
+
+      alert(text);
+
+    }
 
   }
 );
@@ -505,4 +542,5 @@ copyButton.addEventListener(
 </script>
 
 </body>
-  </html>
+
+</html>
