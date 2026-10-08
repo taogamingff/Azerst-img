@@ -1,14 +1,11 @@
 import { put } from "@vercel/blob";
 import crypto from "crypto";
 
-const ALLOWED_TYPES = {
-  "image/jpeg": ".jpg",
-  "image/png": ".png",
-  "image/webp": ".webp",
-  "image/gif": ".gif"
-};
-
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+function makeFilename() {
+  return `${crypto.randomBytes(12).toString("hex")}.png`;
+}
 
 export default async function handler(req, res) {
   try {
@@ -25,65 +22,54 @@ export default async function handler(req, res) {
     if (!file || typeof file === "string") {
       return res.status(400).json({
         ok: false,
-        error: "Chưa chọn hình ảnh."
+        error: "Không nhận được hình ảnh."
       });
     }
 
-    const extension = ALLOWED_TYPES[file.type];
-
-    if (!extension) {
+    if (file.type !== "image/png") {
       return res.status(400).json({
         ok: false,
-        error: "Chỉ hỗ trợ JPG, PNG, WEBP và GIF."
+        error: "Server chỉ nhận PNG. Hãy dùng giao diện website để tự chuyển ảnh sang PNG."
       });
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    if (!file.size || file.size > MAX_FILE_SIZE) {
       return res.status(413).json({
         ok: false,
-        error: "Ảnh tối đa 10MB."
+        error: "Dung lượng ảnh tối đa là 10MB."
       });
     }
 
-    const randomName =
-      crypto.randomBytes(16).toString("hex");
+    const filename = makeFilename();
 
-    const filename =
-      `${randomName}${extension}`;
+    await put(`images/${filename}`, file, {
+      access: "public",
+      contentType: "image/png",
+      addRandomSuffix: false
+    });
 
-    await put(
-      `images/${filename}`,
-      file,
-      {
-        access: "public",
-        contentType: file.type,
-        addRandomSuffix: false
-      }
-    );
-
-    const imageBaseUrl =
+    const baseUrl =
       process.env.IMAGE_BASE_URL ||
       `https://${req.headers.host}`;
 
-    const url =
-      `${imageBaseUrl}/${filename}`;
+    const url = `${baseUrl}/${filename}`;
 
     return res.status(200).json({
       ok: true,
       url,
       filename,
-      mimeType: file.type,
+      mimeType: "image/png",
       size: file.size,
       createdAt: new Date().toISOString()
     });
 
   } catch (error) {
-
-    console.error(error);
+    console.error("UPLOAD_ERROR:", error);
 
     return res.status(500).json({
       ok: false,
-      error: "Upload thất bại."
+      error: "Upload ảnh thất bại.",
+      detail: error?.message || "Unknown error"
     });
   }
 }
