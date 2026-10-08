@@ -1,22 +1,8 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-
   "rewrites": [
     {
-      "source": "/:name([a-z0-9]{6}\\.(png|jpg|webp|gif))",
+      "source": "/:name([a-z0-9]{6}\\.(png|jpg|jpeg|webp|gif))",
       "destination": "/api/image?name=:name"
-    }
-  ],
-
-  "headers": [
-    {
-      "source": "/:name([a-z0-9]{6}\\.(png|jpg|webp|gif))",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
     }
   ]
 }
