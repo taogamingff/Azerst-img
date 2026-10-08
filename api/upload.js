@@ -8,81 +8,50 @@ const ALLOWED_TYPES = {
   "image/gif": ".gif"
 };
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-function checkApiKey(request) {
-  const apiKey = process.env.API_KEY;
-
-  if (!apiKey) {
-    return false;
-  }
-
-  const receivedKey =
-    request.headers.get("x-api-key") ||
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-
-  return receivedKey === apiKey;
-}
-
-function createFileName(extension) {
-  const random = crypto.randomBytes(12).toString("hex");
-
-  return `${random}${extension}`;
-}
-
-export default async function handler(request, response) {
+export default async function handler(req, res) {
   try {
-    // Chỉ cho POST
-    if (request.method !== "POST") {
-      return response.status(405).json({
+    if (req.method !== "POST") {
+      return res.status(405).json({
         ok: false,
         error: "Method Not Allowed"
       });
     }
 
-    // Kiểm tra API Key
-    if (!checkApiKey(request)) {
-      return response.status(401).json({
-        ok: false,
-        error: "API Key không hợp lệ"
-      });
-    }
-
-    // Lấy FormData
-    const formData = await request.formData();
-
+    const formData = await req.formData();
     const file = formData.get("image");
 
     if (!file || typeof file === "string") {
-      return response.status(400).json({
+      return res.status(400).json({
         ok: false,
-        error: "Vui lòng gửi file với field: image"
+        error: "Chưa chọn hình ảnh."
       });
     }
 
-    // Kiểm tra MIME
     const extension = ALLOWED_TYPES[file.type];
 
     if (!extension) {
-      return response.status(400).json({
+      return res.status(400).json({
         ok: false,
-        error: "Chỉ hỗ trợ JPG, PNG, WEBP và GIF"
+        error: "Chỉ hỗ trợ JPG, PNG, WEBP và GIF."
       });
     }
 
-    // Kiểm tra dung lượng
     if (file.size > MAX_FILE_SIZE) {
-      return response.status(413).json({
+      return res.status(413).json({
         ok: false,
-        error: "Ảnh tối đa 10MB"
+        error: "Ảnh tối đa 10MB."
       });
     }
 
-    // Tạo tên file
-    const filename = createFileName(extension);
+    const randomName =
+      crypto.randomBytes(16).toString("hex");
 
-    // Upload Vercel Blob
-    const blob = await put(
+    const filename =
+      `${randomName}${extension}`;
+
+    await put(
       `images/${filename}`,
       file,
       {
@@ -92,36 +61,29 @@ export default async function handler(request, response) {
       }
     );
 
-    // Domain trả ảnh của bạn
-    const baseUrl =
+    const imageBaseUrl =
       process.env.IMAGE_BASE_URL ||
-      `https://${request.headers.get("host")}`;
+      `https://${req.headers.host}`;
 
-    const imageUrl =
-      `${baseUrl}/${filename}`;
+    const url =
+      `${imageBaseUrl}/${filename}`;
 
-    return response.status(200).json({
+    return res.status(200).json({
       ok: true,
-      message: "Upload thành công",
-      url: imageUrl,
-      filename: filename,
-      originalName: file.name,
+      url,
+      filename,
       mimeType: file.type,
       size: file.size,
-      blobUrl: blob.url,
       createdAt: new Date().toISOString()
     });
 
   } catch (error) {
+
     console.error(error);
 
-    return response.status(500).json({
+    return res.status(500).json({
       ok: false,
-      error: "Lỗi máy chủ",
-      detail:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : undefined
+      error: "Upload thất bại."
     });
   }
-                                       }
+}
